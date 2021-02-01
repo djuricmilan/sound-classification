@@ -6,7 +6,7 @@ import math
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from keras.utils import to_categorical
-
+import matplotlib.pyplot as plt
 
 def load():
     classes = ['chainsaw', 'clock_tick', 'crackling_fire', 'crying_baby', 'dog', 'helicopter', 'rain', 'rooster',
@@ -43,7 +43,7 @@ def split_dataset(recordings, labels):
     indices = list(range(0, length))
     random.shuffle(indices)
 
-    train_split_percentage = 0.8
+    train_split_percentage = 0.85
     split_offset = math.floor(train_split_percentage * length)
 
     train_split_indices = indices[0:split_offset]
@@ -68,3 +68,24 @@ def split_dataset(recordings, labels):
     y_test = to_categorical(le.fit_transform(y_test))
 
     return X_train, y_train, X_test, y_test
+
+def evaluate_model(model, X_test, y_test):
+    return model.evaluate(X_test, y_test, verbose=0)
+
+def printResultsPlot(history):
+    # summarize history for accuracy
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+    # summarize history for loss
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()

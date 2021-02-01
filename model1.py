@@ -1,7 +1,7 @@
 """
     First model uses log mel spectogram images as input to the network
 """
-from util import load, split_dataset, getModelsPath
+from util import load, split_dataset, getModelsPath, evaluate_model, printResultsPlot
 from keras import backend as keras_backend
 from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, BatchNormalization, \
@@ -28,7 +28,6 @@ def create_model():
     model.add(Conv2D(filters=32, kernel_size=(3, 3), input_shape=(num_rows, num_columns, num_channels)))
     model.add(BatchNormalization())
     model.add(ReLU())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.1))
 
     model.add(Conv2D(filters=32, kernel_size=(3, 3)))
@@ -40,12 +39,13 @@ def create_model():
     model.add(Conv2D(filters=64, kernel_size=(3, 3), padding='same'))
     model.add(BatchNormalization())
     model.add(ReLU())
-    model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))
     model.add(Dropout(0.3))
 
     model.add(Conv2D(filters=64, kernel_size=(3, 3), padding='same'))
     model.add(BatchNormalization())
     model.add(ReLU())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.3))
 
     # Reduces each h×w feature map to a single number by taking the average of all h,w values.
     model.add(GlobalAveragePooling2D())
@@ -92,9 +92,18 @@ if __name__ == '__main__':
                         y_train,
                         batch_size=batch_size,
                         epochs=num_epochs,
-                        validation_split=0.1,
+                        validation_split=0.2,
                         callbacks=[bestModelCheckpoint],
                         verbose=1)
 
     duration = datetime.now() - start
     print("Training completed in time: ", duration)
+
+    #print results
+    printResultsPlot(history)
+
+    #evaluate model
+    model = load_model(model_path)
+    test_results = evaluate_model(model, X_test, y_test)
+    print("Test accuracy: " + str(test_results[1]))
+    print("Test loss: " + str(test_results[0]))
