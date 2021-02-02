@@ -1,4 +1,5 @@
 data
 venv
+test
 .idea/
 __pycache__/

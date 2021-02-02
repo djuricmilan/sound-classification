@@ -7,11 +7,13 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from keras.utils import to_categorical
 import matplotlib.pyplot as plt
+import uuid
+from sklearn.metrics import classification_report
 
-def load():
-    classes = ['chainsaw', 'clock_tick', 'crackling_fire', 'crying_baby', 'dog', 'helicopter', 'rain', 'rooster',
+classes = ['chainsaw', 'clock_tick', 'crackling_fire', 'crying_baby', 'dog', 'helicopter', 'rain', 'rooster',
                'sea_waves', 'sneezing']
 
+def load():
     # set path to dataset
     dataset_path = os.path.abspath('./data')
 
@@ -47,7 +49,7 @@ def load():
 def getModelsPath(filename):
     return os.path.join(os.path.abspath('./models'), filename)
 
-def split_dataset(recordings, labels):
+def split_dataset(recordings, labels, dir):
     length = len(recordings)
     indices = list(range(0, length))
     random.shuffle(indices)
@@ -76,7 +78,23 @@ def split_dataset(recordings, labels):
     y_train = to_categorical(le.fit_transform(y_train))
     y_test = to_categorical(le.fit_transform(y_test))
 
+    # export test data so that you can use it later for model evaluation
+    export_test_data(recordings, labels, test_split_indices, dir)
+
     return X_train, y_train, X_test, y_test
+
+def export_test_data(recordings, labels, test_split_indices, dir):
+    test_dataset_path = os.path.abspath('./test')
+    test_recordings = np.take(recordings, test_split_indices, axis=0)
+    test_labels = np.take(np.array(labels), test_split_indices, axis=0)
+    metadata = []
+    for recording, label in zip(test_recordings, test_labels):
+        filename = str(uuid.uuid4()) + '.wav'
+        recording.export(os.path.join(test_dataset_path, dir, 'audio', filename))
+        metadata.append([filename, label])
+
+    metadata = pd.DataFrame(metadata, columns=['filename', 'label'])
+    metadata.to_csv(os.path.join(test_dataset_path, dir, 'meta', 'test.csv'), index = False)
 
 def evaluate_model(model, X_test, y_test):
     return model.evaluate(X_test, y_test, verbose=0)
@@ -98,3 +116,26 @@ def printResultsPlot(history):
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
+
+def load_test(dir):
+    recordings = []
+    labels = []
+    directory = os.path.join(os.path.abspath('./test'), dir, 'audio')
+    metadata = pd.read_csv(os.path.join(os.path.abspath('./test'), dir, 'meta', 'test.csv'))
+    for recording in sorted(os.listdir(directory)):
+        recordings.append(Recording(os.path.join(directory, recording)))
+        labels.append(metadata[metadata['filename'] == recording]['label'].values[0])
+
+    if dir == 'model1':
+        X_test = np.array(list(map(lambda x: x.mfcc, recordings)))
+        print(X_test.shape)
+        X_test = X_test.reshape(X_test.shape[0], 431, 13, 1)
+        return X_test, np.array(labels)
+
+def test(model, dir):
+    model.load_weights(os.path.join(os.path.abspath('./models'), dir + '.hdf5'))
+    X_test, y_test = load_test(dir)
+    y_pred = model.predict(X_test, batch_size=128, verbose=1)
+    y_pred_bool = np.argmax(y_pred, axis=1) + 1
+
+    print(classification_report(y_test, y_pred_bool))

@@ -189,6 +189,9 @@ class Recording:
         recording._calculate_mfcc()
         return recording
 
+    def export(self, filepath):
+        self.raw_audio.data.export(filepath, format="wav")
+
 if __name__ == '__main__':
     filepath = os.path.abspath('data/audio/dog/1-30226-A-0.wav')
     recording = Recording(filepath)

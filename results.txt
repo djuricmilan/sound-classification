@@ -1,0 +1,32 @@
+Model 1:
+Trained for 80 epochs (two hours and 38 minutes on my laptop)
+Data augmentation was used, each sound file was replicated 24 times and various distortions were executed
+Train set: 8500 images (0.2validation split = 1700 images)
+Test set: 1500 images
+
+Best train result (lowest validation loss) was obtained in the 78th epoch:
+78th epoch train accuracy: 95,13%
+78th epoch validation accuracy: 94.24%
+TEST ACCURACY: 92.93%
+TEST LOSS: 0.2443
+
+Other metrics:
+    precision    recall  f1-score   support     category
+1        0.97      0.90      0.93       135     chainsaw
+2        0.97      0.93      0.95       147     clock tick
+3        0.94      0.97      0.95       147     crackling fire
+4        0.98      0.92      0.95       150     crying baby
+5        0.90      0.88      0.89       148     dog
+6        0.94      0.86      0.90       167     helicopter
+7        0.99      0.89      0.94       168     rain
+8        0.99      0.98      0.99       141     rooster
+9        0.85      0.99      0.91       141     sea waves
+10       0.82      0.99      0.90       156     sneezing
+
+accuracy                     0.93      1500
+macro    0.93      0.93      0.93      1500     - macro average
+weighted 0.93      0.93      0.93      1500     - weighted average
+
+
+
+

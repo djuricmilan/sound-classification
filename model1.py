@@ -1,7 +1,7 @@
 """
     First model uses log mel spectogram images as input to the network
 """
-from util import load, split_dataset, getModelsPath, evaluate_model, printResultsPlot
+from util import load, split_dataset, getModelsPath, evaluate_model, printResultsPlot, test
 from keras import backend as keras_backend
 from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, BatchNormalization, \
@@ -11,12 +11,13 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 import tensorflow as tf
 from datetime import datetime
 import os
+import sys
 
 num_rows = 431
 num_columns = 13
 num_channels = 1
 num_labels = 10
-num_epochs = 1000
+num_epochs = 80
 batch_size = 128
 
 
@@ -56,30 +57,16 @@ def create_model():
 
     return model
 
-if __name__ == '__main__':
-    #load dataset
-    """
-        librosa.load does the necessary preprocessing for us
-        1. converts sampling rate to 22.05 kHz
-        2. normalizes bit depth range to (-1,1)
-        3. flattens the audio channel to mono
-    """
+def train(model):
+    # load dataset
     recordings, labels, metadata = load()
 
-    #split dataset for training and
-    X_train, y_train, X_test, y_test = split_dataset(recordings, labels)
+    # split dataset for training and
+    X_train, y_train, X_test, y_test = split_dataset(recordings, labels, 'model1')
 
-    #reshape dataset to ensure channel last format (samples, height, width, channels)
+    # reshape dataset to ensure channel last format (samples, height, width, channels)
     X_train = X_train.reshape(X_train.shape[0], num_rows, num_columns, num_channels)
     X_test = X_test.reshape(X_test.shape[0], num_rows, num_columns, num_channels)
-
-    #create model
-    model = create_model()
-    model.compile(
-        loss='categorical_crossentropy',
-        metrics=['accuracy'],
-        optimizer=Adam(lr=1e-4, beta_1=0.99, beta_2=0.999))
-    model.summary()
 
     # Callbacks
     model_file = 'model1.hdf5'
@@ -88,7 +75,7 @@ if __name__ == '__main__':
 
     reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=20, verbose=1, mode='min', min_lr=1e-5)
 
-    #train network
+    # train network
     start = datetime.now()
     history = model.fit(X_train,
                         y_train,
@@ -101,11 +88,25 @@ if __name__ == '__main__':
     duration = datetime.now() - start
     print("Training completed in time: ", duration)
 
-    #print results
+    # print results
     printResultsPlot(history)
 
-    #evaluate model
+    # evaluate model
     model = load_model(model_path)
     test_results = evaluate_model(model, X_test, y_test)
     print("Test accuracy: " + str(test_results[1]))
     print("Test loss: " + str(test_results[0]))
+
+if __name__ == '__main__':
+    # create model
+    model = create_model()
+    model.compile(
+        loss='categorical_crossentropy',
+        metrics=['accuracy'],
+        optimizer=Adam(lr=1e-4, beta_1=0.99, beta_2=0.999))
+    model.summary()
+
+    if sys.argv[1] == "train":
+        train(model)
+    else:
+        test(model, 'model1')
