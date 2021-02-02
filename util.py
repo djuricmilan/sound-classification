@@ -30,8 +30,17 @@ def load():
         if os.path.isdir(directory):
             print('Parsing ' + directory)
             for recording in sorted(os.listdir(directory)):
-                recordings.append(Recording('{0}/{1}'.format(directory, recording)))
-                y.append(classes.index(metadata[metadata['filename'] == recording]['category'].values[0]) + 1)
+                recording_obj = Recording('{0}/{1}'.format(directory, recording))
+                class_label = classes.index(metadata[metadata['filename'] == recording]['category'].values[0]) + 1
+
+                recordings.append(recording_obj)
+                y.append(class_label)
+
+                # augment recording
+                augmentations = recording_obj.augment()
+                for augmentation in augmentations:
+                    recordings.append(augmentation)
+                    y.append(class_label)
 
     return recordings, y, metadata
 

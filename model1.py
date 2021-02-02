@@ -7,7 +7,7 @@ from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, BatchNormalization, \
     GlobalAveragePooling2D, ReLU, Softmax
 from keras.optimizers import Adam
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 import tensorflow as tf
 from datetime import datetime
 import os
@@ -16,7 +16,7 @@ num_rows = 431
 num_columns = 13
 num_channels = 1
 num_labels = 10
-num_epochs = 250
+num_epochs = 1000
 batch_size = 128
 
 
@@ -81,10 +81,12 @@ if __name__ == '__main__':
         optimizer=Adam(lr=1e-4, beta_1=0.99, beta_2=0.999))
     model.summary()
 
-    # Save checkpoints
+    # Callbacks
     model_file = 'model1.hdf5'
     model_path = getModelsPath(model_file)
     bestModelCheckpoint = ModelCheckpoint(filepath=model_path, save_best_only=True, monitor='val_loss', mode='min')
+
+    reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=20, verbose=1, mode='min', min_lr=1e-5)
 
     #train network
     start = datetime.now()
@@ -93,7 +95,7 @@ if __name__ == '__main__':
                         batch_size=batch_size,
                         epochs=num_epochs,
                         validation_split=0.2,
-                        callbacks=[bestModelCheckpoint],
+                        callbacks=[bestModelCheckpoint, reduce_lr_loss],
                         verbose=1)
 
     duration = datetime.now() - start
