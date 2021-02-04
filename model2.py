@@ -1,5 +1,5 @@
 """
-    First model uses mfcc spectogram images as input to the network
+    Second model uses log mel spectogram images as input to the network
 """
 from util import load_augmented, getModelsPath, evaluate_model, printResultsPlot, test
 from keras import backend as keras_backend
@@ -13,13 +13,13 @@ from datetime import datetime
 import os
 import sys
 
-num_rows = 431
-num_columns = 13
+num_rows = 128
+num_columns = 431
 num_channels = 1
 num_labels = 10
 num_epochs = 80
 batch_size = 128
-model_name = 'model1'
+model_name = 'model2'
 
 def create_model():
     # Create a secquential object
@@ -63,7 +63,7 @@ def train(model):
     X_train, y_train = load_augmented('train', model_name)
 
     # Callbacks
-    model_file = 'model1.hdf5'
+    model_file = model_name + '.hdf5'
     model_path = getModelsPath(model_file)
     bestModelCheckpoint = ModelCheckpoint(filepath=model_path, save_best_only=True, monitor='val_loss', mode='min')
 

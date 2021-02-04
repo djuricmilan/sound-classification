@@ -38,13 +38,6 @@ class Recording:
             self.data = audiosegment
             self.raw = (np.frombuffer(self.data._data, dtype="int16") + 0.5) / (32767 + 0.5)  # convert to float
 
-        #def __exit__(self, exception_type, exception_value, traceback):
-        #    if exception_type is not None:
-        #        print
-        #        exception_type, exception_value, traceback
-        #    del self.data
-        #    del self.raw
-
     def __init__(self, filename = ''):
         if(filename != ''):
             self._init_fs_vars(filename)
@@ -68,6 +61,7 @@ class Recording:
                                                               hop_length=Recording.FRAME)
 
         #input 1: log-scaling of mel_spectogram
+        # dimension (128, 431)
         self.log_amplitude = librosa.amplitude_to_db(self.mel_spectrogram)
 
         #mfcc shape = (431, 13); 431 = (audioLenght in seconds * sampling rate / hop_length) = (5*41000)/512

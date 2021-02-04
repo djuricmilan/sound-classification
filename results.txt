@@ -1,31 +1,33 @@
 Model 1:
-Trained for 80 epochs (two hours and 38 minutes on my laptop)
+Trained for 80 epochs (2 hours and 56 minutes on my laptop)
 Data augmentation was used, each sound file was replicated 24 times and various distortions were executed
-Train set: 8500 images (0.2validation split = 1700 images)
+Train set: 8500 images (0.2 validation split = 1700 images)
 Test set: 1500 images
 
-Best train result (lowest validation loss) was obtained in the 78th epoch:
-78th epoch train accuracy: 95,13%
-78th epoch validation accuracy: 94.24%
-TEST ACCURACY: 92.93%
-TEST LOSS: 0.2443
+Best train result (lowest validation loss) was obtained in the 80th (last) epoch:
+80th epoch train accuracy: 95,26%
+80th epoch train loss: 0.1865
+80th epoch validation accuracy: 91.94%
+80th epoch train loss: 0.2568
+TEST ACCURACY: 91.60%
+TEST LOSS: 0.2627
 
 Other metrics:
     precision    recall  f1-score   support     category
-1        0.97      0.90      0.93       135     chainsaw
-2        0.97      0.93      0.95       147     clock tick
-3        0.94      0.97      0.95       147     crackling fire
-4        0.98      0.92      0.95       150     crying baby
-5        0.90      0.88      0.89       148     dog
-6        0.94      0.86      0.90       167     helicopter
-7        0.99      0.89      0.94       168     rain
-8        0.99      0.98      0.99       141     rooster
-9        0.85      0.99      0.91       141     sea waves
-10       0.82      0.99      0.90       156     sneezing
+0        0.99      0.97      0.98       156     chainsaw
+1        0.86      0.89      0.87       169     clock tick
+2        1.00      0.75      0.86       130     crackling fire
+3        0.97      0.95      0.96       156     crying baby
+4        0.80      0.90      0.85       136     dog
+5        0.95      0.84      0.89       165     helicopter
+6        0.99      0.90      0.94       147     rain
+7        0.99      0.98      0.98       150     rooster
+8        0.84      1.00      0.91       139     sea waves
+9        0.85      0.97      0.91       152     sneezing
 
-accuracy                     0.93      1500
-macro    0.93      0.93      0.93      1500     - macro average
-weighted 0.93      0.93      0.93      1500     - weighted average
+accuracy                     0.92      1500
+macro    0.92      0.91      0.92      1500    - macro average
+weighted 0.92      0.92      0.92      1500    - weighted average
 
 
 
