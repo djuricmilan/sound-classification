@@ -60,17 +60,21 @@ class Recording:
                                                               sr=Recording.SAMPLING_RATE,
                                                               hop_length=Recording.FRAME)
 
-        #input 1: log-scaling of mel_spectogram
-        # dimension (128, 431)
-        self.log_amplitude = librosa.amplitude_to_db(self.mel_spectrogram)
+        self.mel_spectrogram2 = librosa.feature.melspectrogram(self.raw_audio.raw,
+                                                              win_length=2048,
+                                                              sr=Recording.SAMPLING_RATE,
+                                                              hop_length=Recording.FRAME,
+                                                              n_mels=40)
 
+        # dimension (128, 431)
+        self.log_amplitude = librosa.amplitude_to_db(self.mel_spectrogram2)
         #mfcc shape = (431, 13); 431 = (audioLenght in seconds * sampling rate / hop_length) = (5*41000)/512
-        # input 2: mfcc of mel_spectogram
+        # input 1: mfcc of mel_spectogram
         self.mfcc = librosa.feature.mfcc(S=self.log_amplitude, n_mfcc=13).transpose()
 
         #http://www.justinsalamon.com/uploads/4/3/9/4/4394963/lostanlen_pcen_spl2018.pdf
-        # input 3: per channel energy normalized mel-spectogram
-        self.per_channel_energy_normalized = librosa.pcen(self.mel_spectrogram)
+        # input 2: per channel energy normalized mel-spectogram
+        self.per_channel_energy_normalized = librosa.pcen(self.mel_spectrogram2)
 
     @classmethod
     def _get_frame(cls, audio, index):

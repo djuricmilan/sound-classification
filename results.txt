@@ -30,5 +30,40 @@ macro    0.92      0.91      0.92      1500    - macro average
 weighted 0.92      0.92      0.92      1500    - weighted average
 
 
+Model 2:
+Trained for 50 epochs (5 hours and 36 minutes on my laptop)
+Data augmentation was used, each sound file was replicated 24 times and various distortions were executed
+Train set: 8500 images (0.2 validation split = 1700 images)
+Test set: 1500 images
+
+Best train result (lowest validation loss) was obtained in the 50th (last) epoch:
+80th epoch train accuracy: 90,21%
+80th epoch train loss: 0.4462
+80th epoch validation accuracy: 86.94%
+80th epoch train loss: 0.55.11
+TEST ACCURACY: 86.12%
+TEST LOSS: 0.567
+
+Other metrics:
+     precision    recall  f1-score   support    category
+0        0.89      0.96      0.92       156     chainsaw
+1        0.93      0.66      0.77       169     clocktick
+2        0.99      0.91      0.95       130     crackling fire
+3        0.93      0.97      0.95       156     crying baby
+4        0.89      0.62      0.74       136     dog
+5        0.85      0.79      0.82       165     helicopter
+6        0.97      0.88      0.92       147     rain
+7        0.97      0.95      0.96       150     rooster
+8        0.85      0.96      0.90       139     sea waves
+9        0.58      0.93      0.72       152     sneezing
+
+accuracy                     0.86      1500
+macro a  0.88      0.86      0.86      1500     - macro average
+weighted 0.88      0.86      0.86      1500     - weighted average
+
+note that the number of mels was decreased from the standard 128 to 40 in order to get results in reasonable time
+this could certainly have influenced the overall model performance
+
+
 
 

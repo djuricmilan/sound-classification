@@ -123,6 +123,8 @@ def load_augmented(phase, model):
         X = np.array(list(map(lambda x: x.mfcc, recordings)))
     if model == 'model2':
         X = np.array(list(map(lambda x: x.log_amplitude, recordings)))
+    if model == 'model3':
+        X = np.array(list(map(lambda x: x.raw_audio.raw, recordings)))
 
     X = X.reshape(X.shape[0], X.shape[1], X.shape[2], 1)
     print(X.shape)

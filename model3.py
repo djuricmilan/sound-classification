@@ -1,11 +1,11 @@
 """
-    Second model uses log mel spectogram images as input to the network
+    Second model usesraw waveforms as input to the network
 """
 from util import load_augmented, getModelsPath, evaluate_model, printResultsPlot, test
 from keras import backend as keras_backend
 from keras.models import Sequential, load_model
-from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, BatchNormalization, \
-    GlobalAveragePooling2D, ReLU, Softmax
+from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D, BatchNormalization, \
+    GlobalAveragePooling1D, ReLU, Softmax
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 import tensorflow as tf
@@ -13,43 +13,41 @@ from datetime import datetime
 import os
 import sys
 
-num_rows = 40
-num_columns = 431
-num_channels = 1
+length = 220500
 num_labels = 10
-num_epochs = 50
+num_epochs = 80
 batch_size = 128
-model_name = 'model2'
+model_name = 'model3'
 
 def create_model():
     # Create a secquential object
     model = Sequential()
 
     # Conv layers
-    model.add(Conv2D(filters=32, kernel_size=(3, 3), input_shape=(num_rows, num_columns, num_channels)))
+    model.add(Conv1D(filters=32, kernel_size=3, input_shape=(length, 1)))
     model.add(BatchNormalization())
     model.add(ReLU())
     model.add(Dropout(0.1))
 
-    model.add(Conv2D(filters=32, kernel_size=(3, 3)))
+    model.add(Conv1D(filters=32, kernel_size=3))
     model.add(BatchNormalization())
     model.add(ReLU())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(MaxPooling1D(pool_size=2))
     model.add(Dropout(0.2))
 
-    model.add(Conv2D(filters=64, kernel_size=(3, 3), padding='same'))
+    model.add(Conv1D(filters=64, kernel_size=3, padding='same'))
     model.add(BatchNormalization())
     model.add(ReLU())
     model.add(Dropout(0.3))
 
-    model.add(Conv2D(filters=64, kernel_size=(3, 3), padding='same'))
+    model.add(Conv1D(filters=64, kernel_size=3, padding='same'))
     model.add(BatchNormalization())
     model.add(ReLU())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(MaxPooling1D(pool_size=2))
     model.add(Dropout(0.3))
 
     # Reduces each h×w feature map to a single number by taking the average of all h,w values.
-    model.add(GlobalAveragePooling2D())
+    model.add(GlobalAveragePooling1D())
 
     # Softmax output
     model.add(Dense(num_labels))
