@@ -8,7 +8,7 @@ Best train result (lowest validation loss) was obtained in the 80th (last) epoch
 80th epoch train accuracy: 96,57%
 80th epoch train loss: 0.1865
 80th epoch validation accuracy: 93.94%
-80th epoch train loss: 0.2614
+80th epoch validation loss: 0.2614
 TEST ACCURACY: 93.11%
 TEST LOSS: 0.2688
 
@@ -30,6 +30,9 @@ macro av 0.94      0.92      0.92      1500     - macro average
 weighted 0.93      0.93      0.92      1500     - weighted averages
 
 
+
+
+
 Model 2:
 Trained for 50 epochs (5 hours and 36 minutes on my laptop)
 Data augmentation was used, each sound file was replicated 24 times and various distortions were executed
@@ -40,7 +43,7 @@ Best train result (lowest validation loss) was obtained in the 50th (last) epoch
 80th epoch train accuracy: 90,21%
 80th epoch train loss: 0.4462
 80th epoch validation accuracy: 86.94%
-80th epoch train loss: 0.55.11
+80th epoch validation loss: 0.5511
 TEST ACCURACY: 86.12%
 TEST LOSS: 0.567
 
@@ -67,3 +70,32 @@ this could certainly have influenced the overall model performance
 
 
 
+Model 4:
+Trained for 80 epochs (3 hours and 48 minutes on my laptop)
+Data augmentation was used, each sound file was replicated 24 times and various distortions were executed
+Train set: 8500 images (0.2 validation split = 1700 images)
+Test set: 1500 images
+
+Best train result (lowest validation loss) was obtained in the 78th epoch:
+78th epoch train accuracy: 96,02%
+78th epoch train loss: 0.1493
+78th epoch validation accuracy: 97.76%
+78th epoch validation loss: 0.0822
+TEST ACCURACY: 97.30%
+TEST LOSS: 0.0896
+
+     precision   recall  f1-score   support     category
+0        1.00      0.97      0.98       156     chainsaw
+1        0.99      0.93      0.96       169     clock tick
+2        0.95      0.98      0.96       130     crackling fire
+3        1.00      0.99      0.99       156     crying baby
+4        0.94      0.96      0.95       136     dog
+5        0.90      0.98      0.94       165     helicopter
+6        0.99      0.93      0.96       147     rain
+7        0.99      1.00      0.99       150     rooster
+8        0.99      0.97      0.98       139     sea waves
+9        0.95      0.97      0.96       152     sneezing
+
+accuracy                     0.97      1500
+macro av 0.97      0.97      0.97      1500     - macro average
+weighted 0.97      0.97      0.97      1500     - weighted average
