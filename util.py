@@ -119,9 +119,9 @@ def load_augmented(phase, model):
         labels.append(metadata[metadata['filename'] == recording]['label'].values[0])
 
     X = []
-    if model == 'model1':
+    if model == 'model1' or model == 'model4':
         X = np.array(list(map(lambda x: x.mfcc, recordings)))
-    if model == 'model2':
+    if model == 'model2' or model == 'model5':
         X = np.array(list(map(lambda x: x.log_amplitude, recordings)))
     if model == 'model3':
         X = np.array(list(map(lambda x: x.raw_audio.raw, recordings)))
