@@ -99,3 +99,37 @@ TEST LOSS: 0.0896
 accuracy                     0.97      1500
 macro av 0.97      0.97      0.97      1500     - macro average
 weighted 0.97      0.97      0.97      1500     - weighted average
+
+
+
+
+
+Model 5:
+Trained for 50 epochs (8 hours and 40 minutes on my laptop)
+Data augmentation was used, each sound file was replicated 24 times and various distortions were executed
+Train set: 8500 images (0.2 validation split = 1700 images)
+Test set: 1500 images
+
+Best train result (lowest validation loss) was obtained in the 47th epoch:
+47th epoch train accuracy: 98,71%
+47th epoch train loss: 0.0704
+47th epoch validation accuracy: 98.59%
+47th epoch validation loss: 0.0519
+TEST ACCURACY: 97.30%
+TEST LOSS: 0.0896
+
+   precision    recall  f1-score   support      category
+0       0.98      0.98      0.98       156      chainsaw
+1       0.98      0.95      0.96       169      clock tick
+2       0.99      0.98      0.98       130      crackling fire
+3       0.99      0.99      0.99       156      crying baby
+4       0.97      0.98      0.97       136      dog
+5       0.97      0.99      0.98       165      helicopter
+6       0.99      0.99      0.99       147      rain
+7       1.00      0.99      1.00       150      rooster
+8       0.99      0.99      0.99       139      sea waves
+9       0.94      0.98      0.96       152      sneezing
+
+accuracy                    0.98      1500
+macro a 0.98      0.98      0.98      1500      - macro average
+weigh a 0.98      0.98      0.98      1500      - weighted average

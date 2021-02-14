@@ -84,7 +84,7 @@ def train(model):
     X_train, y_train = load_augmented('train', model_name)
 
     # Callbacks
-    model_file = 'model5.hdf5'
+    model_file = model_name + '.hdf5'
     model_path = getModelsPath(model_file)
     bestModelCheckpoint = ModelCheckpoint(filepath=model_path, save_best_only=True, monitor='val_loss', mode='min')
 
